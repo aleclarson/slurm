@@ -59,20 +59,26 @@ function slurm(flags = empty) {
       if (!flag) {
         flagsBegin = i
       } else if (args[flag] === undefined) {
-        let opts = flags[flag] || empty
-        if (typeof opts == 'string') {
-          opts = flags[opts]
-        }
-        if (typeof opts == 'function') {
-          args[flag] = opts(true)
-        } else if (opts.type && opts.type != 'boolean') {
-          fatal(args[flagIdx] + ' must be a ' + opts.type)
-        } else {
-          args[flag] = true
-        }
+        setFlag(flag)
       }
       flag = arg
       flagIdx = i
+    }
+  }
+  if (flag && args[flag] === undefined) {
+    setFlag(flag)
+  }
+  function setFlag(flag) {
+    let opts = flags[flag] || empty
+    if (typeof opts == 'string') {
+      opts = flags[opts]
+    }
+    if (typeof opts == 'function') {
+      args[flag] = opts(true)
+    } else if (opts.type && opts.type != 'boolean') {
+      fatal(args[flagIdx] + ' must be a ' + opts.type)
+    } else {
+      args[flag] = true
     }
   }
   if (flagsBegin >= 0) {
