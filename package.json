@@ -1,0 +1,7 @@
+{
+  "name": "slurm",
+  "version": "0.0.1",
+  "dependencies": {
+    "huey": "aleclarson/huey#0.1.0"
+  }
+}
