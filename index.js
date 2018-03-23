@@ -31,24 +31,28 @@ function slurm(flags = empty) {
       if (typeof opts == 'string') {
         opts = flags[opts]
       }
-      switch (opts.type) {
-        case 'boolean':
-          arg = !falseRE.test(arg)
-          break
-        case 'number':
-          arg = Number(arg)
-          if (isNaN(arg))
-            fatal(args[flagIdx] + ' must be a number')
-          break
-      }
-      if (opts.list) {
-        if (val) {
-          val.push(arg)
-        } else {
-          args[flag] = [arg]
-        }
+      if (typeof opts == 'function') {
+        args[flag] = opts(arg)
       } else {
-        args[flag] = arg
+        switch (opts.type) {
+          case 'boolean':
+            arg = !falseRE.test(arg)
+            break
+          case 'number':
+            arg = Number(arg)
+            if (isNaN(arg))
+              fatal(args[flagIdx] + ' must be a number')
+            break
+        }
+        if (opts.list) {
+          if (val) {
+            val.push(arg)
+          } else {
+            args[flag] = [arg]
+          }
+        } else {
+          args[flag] = arg
+        }
       }
     }
     if (isFlag) {
@@ -59,7 +63,9 @@ function slurm(flags = empty) {
         if (typeof opts == 'string') {
           opts = flags[opts]
         }
-        if (opts.type && opts.type != 'boolean') {
+        if (typeof opts == 'function') {
+          args[flag] = opts(true)
+        } else if (opts.type && opts.type != 'boolean') {
           fatal(args[flagIdx] + ' must be a ' + opts.type)
         } else {
           args[flag] = true
@@ -74,7 +80,7 @@ function slurm(flags = empty) {
   }
   for (let flag in flags) {
     let opts = flags[flag] || empty
-    if (typeof opts == 'string') {
+    if (typeof opts != 'object') {
       continue
     }
     if (opts.default !== undefined) {
