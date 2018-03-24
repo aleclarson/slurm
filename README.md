@@ -1,2 +1,2 @@
 
-# slurm v0.1.0 
+# slurm v0.1.1 
