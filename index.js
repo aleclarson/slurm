@@ -78,7 +78,7 @@ function slurm(flags = empty) {
     } else if (opts.type && opts.type != 'boolean') {
       fatal(args[flagIdx] + ' must be a ' + opts.type)
     } else {
-      args[flag] = true
+      args[flag] = opts.list ? [] : true
     }
   }
   if (flagsBegin >= 0) {
