@@ -27,10 +27,7 @@ function slurm(flags = empty) {
     }
     else if (flag) {
       let val = args[flag]
-      let opts = flags[flag] || empty
-      if (typeof opts == 'string') {
-        opts = flags[opts]
-      }
+      let opts = getFlag(flag)
       if (typeof opts == 'function') {
         args[flag] = opts(arg)
       } else {
@@ -71,11 +68,15 @@ function slurm(flags = empty) {
   if (flag && args[flag] === undefined) {
     setFlag(flag)
   }
-  function setFlag(flag) {
-    let opts = flags[flag] || empty
+  function getFlag(flag) {
+    let opts = flags[flag]
     if (typeof opts == 'string') {
       opts = flags[opts]
     }
+    return opts === true ? empty : opts
+  }
+  function setFlag(flag) {
+    let opts = getFlag(flag)
     if (typeof opts == 'function') {
       args[flag] = opts(true)
     } else if (opts.type && opts.type != 'boolean') {
@@ -88,7 +89,7 @@ function slurm(flags = empty) {
     args.splice(flagsBegin, Infinity)
   }
   for (let flag in flags) {
-    let opts = flags[flag] || empty
+    let opts = flags[flag]
     if (typeof opts != 'object') {
       continue
     }
