@@ -56,6 +56,9 @@ function slurm(flags = empty) {
       }
     }
     if (isFlag) {
+      if (flags[arg] == null) {
+        fatal('Unrecognized flag: ' + args[i])
+      }
       if (!flag) {
         flagsBegin = i
       } else if (args[flag] === undefined) {
