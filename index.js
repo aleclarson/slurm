@@ -8,6 +8,7 @@ const empty = {}
 
 function slurm(flags = empty) {
   let args = process.argv.slice(2)
+  args._ = args.join(' ')
   let flag = null, flagIdx = -1
   let flagsBegin = -1
   for (let i = 0; i < args.length; i++) {
