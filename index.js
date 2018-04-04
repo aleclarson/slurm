@@ -32,6 +32,10 @@ function slurm(flags = empty) {
       if (typeof opts == 'function') {
         args[flag] = opts(arg)
       } else {
+        if (opts.rest) {
+          args[flag] = args.slice(i)
+          break
+        }
         switch (opts.type) {
           case 'boolean':
             arg = !falseRE.test(arg)
