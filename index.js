@@ -1,8 +1,8 @@
 const huey = require('huey')
 
 const falseRE = /^(0|false|no)$/i
-const shortRE = /^\-[a-z]$/i
-const longRE = /^\-\-[a-z\-]+$/i
+const shortRE = /^\-[^\-]$/i
+const longRE = /^\-\-[^\-].+$/i
 
 const empty = {}
 
