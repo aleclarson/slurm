@@ -1,5 +1,3 @@
-const huey = require('huey')
-
 const falseRE = /^(0|false|no)$/i
 const shortRE = /^\-[^\-]$/i
 const longRE = /^\-\-[^\-].+$/i
@@ -49,7 +47,7 @@ function slurm(flags = empty) {
           case 'number':
             arg = Number(arg)
             if (isNaN(arg))
-              fatal(args[flagIdx] + ' must be a number')
+              return slurm.error(args[flagIdx] + ' must be a number')
             break
         }
         // Flags may have one or many values.
@@ -73,7 +71,7 @@ function slurm(flags = empty) {
       }
       // Unknown flags are considered errors.
       if (flags[arg] == null) {
-        fatal('Unrecognized flag: ' + args[i])
+        return slurm.error('Unrecognized flag: ' + args[i])
       }
       if (!flag) {
         // Track where the first flag is.
@@ -107,7 +105,7 @@ function slurm(flags = empty) {
       args[flag] = opts(true)
     } else if (opts.type && opts.type != 'boolean') {
       // Non-boolean flags must have a value.
-      fatal(args[flagIdx] + ' must be a ' + opts.type)
+      return slurm.error(args[flagIdx] + ' must be a ' + opts.type)
     } else {
       // List flags default to an empty array.
       args[flag] = opts.list ? [] : true
@@ -132,10 +130,9 @@ function slurm(flags = empty) {
   return args
 }
 
-module.exports = slurm
-
-function fatal(msg) {
-  console.log(huey.red('Error: ') + msg)
-  process.exit()
+slurm.error = function(msg) {
+  console.log('error:', msg)
+  process.exit(1)
 }
 
+module.exports = slurm
