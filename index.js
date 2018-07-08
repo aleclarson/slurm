@@ -65,6 +65,12 @@ function slurm(flags = empty) {
       }
     }
     if (isFlag) {
+      // Support -x=1 or --foo=1,2
+      let eq = arg.indexOf('=')
+      if (eq !== -1) {
+        arg = arg.slice(0, eq)
+        args.splice(i + 1, 0, arg.slice(eq + 1))
+      }
       // Unknown flags are considered errors.
       if (flags[arg] == null) {
         fatal('Unrecognized flag: ' + args[i])
