@@ -103,10 +103,20 @@ function slurm(flags = empty) {
       // Flag functions are passed `true` if no values exist
       // between it and the next flag (or the end).
       args[flag] = opts(true)
-    } else if (opts.type && opts.type != 'boolean') {
-      // Non-boolean flags must have a value.
+    }
+    else if (opts.type) {
+      switch (opts.type) {
+        case 'boolean':
+          args[flag] = true
+          return
+        case 'string':
+          args[flag] = ''
+          return
+      }
+      // Other types must have a value.
       return slurm.error(args[flagIdx] + ' must be a ' + opts.type)
-    } else {
+    }
+    else {
       // List flags default to an empty array.
       args[flag] = opts.list ? [] : true
     }
