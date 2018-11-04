@@ -1,5 +1,5 @@
 const falseRE = /^(0|false|no)$/i
-const shortRE = /^\-[^\-]$/i
+const shortRE = /^\-[^\-]+/i
 const longRE = /^\-\-[^\-].+$/i
 
 const empty = {}
@@ -15,7 +15,12 @@ function slurm(flags = empty) {
 
     // Flags like -z
     if (shortRE.test(arg)) {
-      arg = arg.slice(1)
+      // Treat -abc like -a -b -c
+      if (arg.length > 1) {
+        let expanded = arg.slice(2).split('').map(ch => '-' + ch)
+        args.splice(i, 0, ...expanded)
+      }
+      arg = arg.slice(1, 2)
       isFlag = true
     }
 
