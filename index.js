@@ -3,6 +3,7 @@ const shortRE = /^\-[^\-]+/i
 const longRE = /^\-\-[^\-].+$/i
 
 const empty = {}
+const forbiddenFlags = ['_', 'length']
 
 function slurm(flags = empty) {
   let args = process.argv.slice(2)
@@ -81,6 +82,10 @@ function slurm(flags = empty) {
       if (eq !== -1) {
         args.splice(i + 1, 0, arg.slice(eq + 1))
         arg = arg.slice(0, eq)
+      }
+
+      if (forbiddenFlags.indexOf(arg) >= 0) {
+        return slurm.error('Forbidden flag: ' + args[i])
       }
 
       // Unknown flags are considered errors.
