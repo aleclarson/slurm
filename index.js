@@ -23,7 +23,7 @@ function slurm(flags = empty) {
     // Flags like -z
     if (shortRE.test(arg)) {
       // Treat -abc like -a -b -c
-      if (arg.length > 1) {
+      if (arg.length > 2) {
         let expanded = arg.slice(2).split('').map(ch => '-' + ch)
         args.splice(i, 0, ...expanded)
       }
