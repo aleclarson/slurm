@@ -3,11 +3,17 @@ const shortRE = /^\-[^\-]+/i
 const longRE = /^\-\-[^\-].+$/i
 
 const empty = {}
-const forbiddenFlags = ['_', 'length']
+const forbiddenFlags = ['*', '_', 'length']
 
 function slurm(flags = empty) {
   let args = process.argv.slice(2)
   args._ = args.join(' ')
+
+  // Pass "*" to disable strict mode.
+  if (flags == '*') {
+    flags = { '*': true }
+  }
+
   let flag = null, flagIdx = -1
   let flagsBegin = -1
   for (let i = 0; i < args.length; i++) {
@@ -89,7 +95,7 @@ function slurm(flags = empty) {
       }
 
       // Unknown flags are considered errors.
-      if (flags[arg] == null) {
+      if (flags[arg] == null && flags['*'] !== true) {
         return slurm.error('Unrecognized flag: ' + args[i])
       }
 
@@ -113,6 +119,7 @@ function slurm(flags = empty) {
 
   function getFlag(flag) {
     let opts = flags[flag]
+    if (opts === undefined) return empty
     if (typeof opts == 'string') {
       // Alias flags are supported.
       opts = flags[opts]
