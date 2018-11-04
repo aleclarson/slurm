@@ -7,7 +7,7 @@ const forbiddenFlags = ['*', '_', 'length']
 
 function slurm(flags = empty) {
   let args = process.argv.slice(2)
-  args._ = args.join(' ')
+  args = Object.assign({ _: args.join(' '), length: args.length }, args)
 
   // Pass "*" to disable strict mode.
   if (flags == '*') {
