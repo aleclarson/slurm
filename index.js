@@ -1,4 +1,3 @@
-const falseRE = /^(0|false|no)$/i
 const shortRE = /^\-[^\-]+/i
 const longRE = /^\-\-[^\-].+$/i
 
@@ -57,17 +56,33 @@ function slurm(flags = empty) {
           args[flag] = args.slice(i)
           break
         }
+
         // Validate flag-associated values.
         switch (opts.type) {
           case 'boolean':
-            arg = !falseRE.test(arg)
-            break
+            if (arg == 0 || arg == 1) {
+              arg = !!arg
+              break
+            }
+
+            // Ensure a value exists for this flag.
+            if (val === undefined) {
+              setDefaultFlag(flag)
+            }
+
+            // Non-boolean strings are flagless arguments.
+            // Reuse `arg` with `flag` set to null.
+            i--
+            flag = null
+            continue
+
           case 'number':
             arg = Number(arg)
             if (isNaN(arg))
               return slurm.error(args[flagIdx] + ' must be a number')
             break
         }
+
         // Flags may have one or many values.
         if (opts.list) {
           if (val) {
@@ -99,12 +114,12 @@ function slurm(flags = empty) {
         return slurm.error('Unrecognized flag: ' + args[i])
       }
 
-      if (!flag) {
+      if (flagsBegin == -1) {
         // Track where the first flag is.
         flagsBegin = i
       } else if (args[flag] === undefined) {
-        // Ensure a property exists for the previous flag.
-        setFlag(flag)
+        // Ensure a value exists for the previous flag.
+        setDefaultFlag(flag)
       }
 
       flag = arg
@@ -112,9 +127,9 @@ function slurm(flags = empty) {
     }
   }
 
-  // Ensure a property exists for the last flag.
+  // Ensure a value exists for the last flag.
   if (flag && args[flag] === undefined) {
-    setFlag(flag)
+    setDefaultFlag(flag)
   }
 
   function getFlag(flag) {
@@ -128,7 +143,7 @@ function slurm(flags = empty) {
     return opts === true ? empty : opts
   }
 
-  function setFlag(flag) {
+  function setDefaultFlag(flag) {
     let opts = getFlag(flag)
     if (typeof opts == 'function') {
       // Flag functions are passed `true` if no values exist
