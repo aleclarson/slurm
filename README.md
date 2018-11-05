@@ -1,4 +1,4 @@
-# slurm v0.5.0
+# slurm v0.5.1
 
 CLI argument parser
 
