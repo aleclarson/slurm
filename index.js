@@ -5,12 +5,9 @@ const longRE = /^\-\-[^\-].+$/i
 const empty = {}
 const forbiddenFlags = ['*', '_', 'length']
 
-const splice = Function.call.bind([].splice)
-const slice = Function.call.bind([].slice)
-
 function slurm(flags = empty) {
   let args = process.argv.slice(2)
-  args = Object.assign({ _: args.join(' '), length: args.length }, args)
+  args._ = args.join(' ')
 
   // Pass "*" to disable strict mode.
   if (flags == '*') {
@@ -28,7 +25,7 @@ function slurm(flags = empty) {
       // Treat -abc like -a -b -c
       if (arg.length > 2) {
         let expanded = arg.slice(2).split('').map(ch => '-' + ch)
-        splice(args, i, 0, ...expanded)
+        args.splice(i, 0, ...expanded)
       }
       arg = arg.slice(1, 2)
       isFlag = true
@@ -42,7 +39,7 @@ function slurm(flags = empty) {
 
     // The -- arg acts as an unnamed rest flag.
     else if (arg == '--') {
-      args[arg] = slice(args, i + 1)
+      args[arg] = args.slice(i + 1)
       if (!flag) flagsBegin = i
       break
     }
@@ -57,7 +54,7 @@ function slurm(flags = empty) {
       } else {
         if (opts.rest) {
           // Rest flags consume the remaining args.
-          args[flag] = slice(args, i)
+          args[flag] = args.slice(i)
           break
         }
         // Validate flag-associated values.
@@ -89,7 +86,7 @@ function slurm(flags = empty) {
       // Support -x=1 or --foo=1,2
       let eq = arg.indexOf('=')
       if (eq !== -1) {
-        splice(args, i + 1, 0, arg.slice(eq + 1))
+        args.splice(i + 1, 0, arg.slice(eq + 1))
         arg = arg.slice(0, eq)
       }
 
@@ -158,7 +155,7 @@ function slurm(flags = empty) {
 
   // Remove raw flags from `args` array.
   if (flagsBegin >= 0) {
-    splice(args, flagsBegin, Infinity)
+    args.splice(flagsBegin, Infinity)
   }
 
   // Apply default values.
