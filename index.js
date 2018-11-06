@@ -38,8 +38,20 @@ function slurm(flags = empty) {
 
     // The -- arg acts as an unnamed rest flag.
     else if (arg == '--') {
-      args[arg] = args.slice(i + 1)
-      if (!flag) flagsBegin = i
+      let offset = args._.indexOf(' -- ')
+      if (offset !== -1) {
+        // Remove '--' and every arg after it
+        args._ = args._.slice(0, offset)
+
+        // Define '--' property on `args`
+        args[arg] = args.slice(i + 1)
+
+        // Track where the first flag starts.
+        if (flagsBegin == -1) {
+          flagsBegin = i
+        }
+      }
+      // All arguments are processed.
       break
     }
 
@@ -114,11 +126,12 @@ function slurm(flags = empty) {
         return slurm.error('Unrecognized flag: ' + args[i])
       }
 
+      // Track where the first flag is.
       if (flagsBegin == -1) {
-        // Track where the first flag is.
         flagsBegin = i
-      } else if (args[flag] === undefined) {
-        // Ensure a value exists for the previous flag.
+      }
+      // Ensure a value exists for the previous flag.
+      else if (args[flag] === undefined) {
         setDefaultFlag(flag)
       }
 
@@ -170,7 +183,7 @@ function slurm(flags = empty) {
 
   // Remove raw flags from `args` array.
   if (flagsBegin >= 0) {
-    args.splice(flagsBegin, Infinity)
+    args.length = flagsBegin
   }
 
   // Apply default values.
