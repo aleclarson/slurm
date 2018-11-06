@@ -64,6 +64,14 @@ type MaybeFlags<T> = Exclude<
   '*' | Filter<{ [P in keyof T]: FlagValue<T[P]> }, never>
 >
 
+interface StaticArgs extends Array<string> {
+  /** The original `process.argv.slice(2).join(' ')` */
+  _: string
+
+  /** The `--` flag that steals the remaining arguments */
+  ['--']?: string[]
+}
+
 declare module 'slurm' {
   /**
    * Any of the values in the `flags` map you pass can be: a `FlagConfig`
@@ -77,8 +85,8 @@ declare module 'slurm' {
    *
    * When a value is `true`, it's equivalent to an empty `FlagConfig` object.
    */
-  export default function slurm<T extends FlagSchema = FlagSchema>(flags?: T): ParsedArgs<T>;
-  export default function slurm(flags: '*'): ParsedArgs;
+  export default function slurm<T extends FlagSchema = FlagSchema>(flags?: T): ParsedArgs<T> & StaticArgs;
+  export default function slurm(flags: '*'): ParsedArgs & StaticArgs;
 
   export type FlagSchema = { [name: string]: FlagConfig }
   export type FlagConfig =
@@ -89,24 +97,7 @@ declare module 'slurm' {
     ValueFlag |
     ((value: string | true) => void)
 
-  export type ParsedArgs<T extends FlagSchema = FlagSchema> = Remap<(
+  export type ParsedArgs<T extends FlagSchema = FlagSchema> = Remap<{} &
     FlagSchema extends T ? {} : { [P in MaybeFlags<T>]?: FlagValue<T[P]> }
-  ) & {
-    [index: number]: string
-
-    /**
-     * The number of flagless arguments
-     */
-    length: number
-
-    /**
-     * The original `process.argv.slice(2).join(' ')`
-     */
-    _: string
-
-    /**
-     * The `--` flag that steals the remaining arguments
-     */
-    ['--']?: string[]
-  }>
+  >
 }
