@@ -207,4 +207,5 @@ slurm.error = function(msg) {
   process.exit(1)
 }
 
+slurm.default = slurm
 module.exports = slurm
