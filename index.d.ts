@@ -85,8 +85,14 @@ declare module 'slurm' {
    *
    * When a value is `true`, it's equivalent to an empty `FlagConfig` object.
    */
-  export default function slurm<T extends FlagSchema = FlagSchema>(flags?: T): ParsedArgs<T> & StaticArgs;
-  export default function slurm(flags: '*'): ParsedArgs & StaticArgs;
+  const slurm: ISlurm
+  export default slurm
+  export interface ISlurm {
+    <T extends FlagSchema = FlagSchema>(flags?: T): ParsedArgs<T> & StaticArgs;
+    (flags: '*'): ParsedArgs & StaticArgs;
+
+    error: (msg: string) => void;
+  }
 
   export type FlagSchema = { [name: string]: FlagConfig }
   export type FlagConfig =
