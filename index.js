@@ -40,11 +40,11 @@ function slurm(flags = empty) {
     else if (arg == '--') {
       let offset = args._.indexOf(' -- ')
       if (offset !== -1) {
+        // Define '--' property on `args`
+        args[arg] = args._.slice(offset + 4)
+
         // Remove '--' and every arg after it
         args._ = args._.slice(0, offset)
-
-        // Define '--' property on `args`
-        args[arg] = args.slice(i + 1)
 
         // Track where the first flag starts.
         if (flagsBegin == -1) {
