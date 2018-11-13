@@ -57,23 +57,24 @@ function slurm(flags = empty) {
 
     // When `flag` exists, this argument is a flag value.
     else if (flag) {
-      let opts = getFlag(flag)
+      let name = resolveFlag(flag)
+      let cfg = getFlag(name)
 
       // Flag functions are called once per associated value.
-      if (typeof opts == 'function') {
-        args[flag] = opts(arg)
+      if (typeof cfg == 'function') {
+        args[name] = cfg(arg)
       }
 
       // Rest flags consume the remaining args.
-      else if (opts.rest) {
-        args[flag] = args.slice(i)
+      else if (cfg.rest) {
+        args[name] = args.slice(i)
         break
       }
 
       // Validate flag-associated values.
       else {
-        let val = args[flag]
-        switch (opts.type) {
+        let val = args[name]
+        switch (cfg.type) {
           case 'boolean':
             if (arg == 0 || arg == 1) {
               arg = !!arg
@@ -82,7 +83,7 @@ function slurm(flags = empty) {
 
             // Ensure a value exists for this flag.
             if (val === undefined) {
-              setDefaultFlag(flag)
+              setDefaultFlag(name)
             }
 
             // Non-boolean strings are flagless arguments.
@@ -99,14 +100,14 @@ function slurm(flags = empty) {
         }
 
         // Flags may have one or many values.
-        if (opts.list) {
+        if (cfg.list) {
           if (val) {
             val.push(arg)
           } else {
-            args[flag] = [arg]
+            args[name] = [arg]
           }
         } else {
-          args[flag] = arg
+          args[name] = arg
         }
       }
     }
@@ -148,39 +149,43 @@ function slurm(flags = empty) {
     setDefaultFlag(flag)
   }
 
-  function getFlag(flag) {
-    let opts = flags[flag]
-    if (opts === undefined) return empty
-    if (typeof opts == 'string') {
-      // Alias flags are supported.
-      opts = flags[opts]
-    }
-    // Reuse the same empty object for simple flags.
-    return opts === true ? empty : opts
+  // Resolve flag aliases.
+  function resolveFlag(name) {
+    let flag = flags[name]
+    return typeof flag == 'string' ? flag : name
   }
 
-  function setDefaultFlag(flag) {
-    let opts = getFlag(flag)
-    if (typeof opts == 'function') {
+  // Get a flag's config.
+  function getFlag(name) {
+    let flag = flags[resolveFlag(name)]
+    return flag && flag !== true ? flag : empty
+  }
+
+  // Use a default value if necessary.
+  function setDefaultFlag() {
+    if (!flag) return
+    let name = resolveFlag(flag)
+    let cfg = getFlag(name)
+    if (typeof cfg == 'function') {
       // Flag functions are passed `true` if no values exist
       // between it and the next flag (or the end).
-      args[flag] = opts(true)
+      args[name] = cfg(true)
     }
-    else if (opts.type) {
-      switch (opts.type) {
+    else if (cfg.type) {
+      switch (cfg.type) {
         case 'boolean':
-          args[flag] = true
+          args[name] = true
           return
         case 'string':
-          args[flag] = ''
+          args[name] = ''
           return
       }
       // Other types must have a value.
-      return slurm.error(args[flagIdx] + ' must be a ' + opts.type)
+      return slurm.error(args[flagIdx] + ' must be a ' + cfg.type)
     }
     else {
       // List flags default to an empty array.
-      args[flag] = opts.list ? [] : true
+      args[name] = cfg.list ? [] : true
     }
   }
 
@@ -191,13 +196,13 @@ function slurm(flags = empty) {
 
   // Apply default values.
   for (let flag in flags) {
-    let opts = flags[flag]
-    if (typeof opts != 'object') {
+    let cfg = flags[flag]
+    if (!cfg || typeof cfg != 'object') {
       continue
     }
-    if (opts.default !== undefined) {
+    if (cfg.default !== undefined) {
       if (args[flag] === undefined) {
-        args[flag] = opts.default
+        args[flag] = cfg.default
       }
     }
   }
