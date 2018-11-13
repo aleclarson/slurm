@@ -57,19 +57,22 @@ function slurm(flags = empty) {
 
     // When `flag` exists, this argument is a flag value.
     else if (flag) {
-      let val = args[flag]
       let opts = getFlag(flag)
-      if (typeof opts == 'function') {
-        // Flag functions are called once per associated value.
-        args[flag] = opts(arg)
-      } else {
-        if (opts.rest) {
-          // Rest flags consume the remaining args.
-          args[flag] = args.slice(i)
-          break
-        }
 
-        // Validate flag-associated values.
+      // Flag functions are called once per associated value.
+      if (typeof opts == 'function') {
+        args[flag] = opts(arg)
+      }
+
+      // Rest flags consume the remaining args.
+      else if (opts.rest) {
+        args[flag] = args.slice(i)
+        break
+      }
+
+      // Validate flag-associated values.
+      else {
+        let val = args[flag]
         switch (opts.type) {
           case 'boolean':
             if (arg == 0 || arg == 1) {
