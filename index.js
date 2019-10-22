@@ -38,10 +38,16 @@ function slurm(flags = empty) {
 
     // The -- arg acts as an unnamed rest flag.
     else if (arg == '--') {
-      let offset = args._.indexOf(' -- ')
+      let offset = -1
+      if (args._.startsWith('-- ')) {
+        offset = 0
+      } else {
+        offset = args._.indexOf(' -- ')
+        if (offset >= 0) offset++
+      }
       if (offset !== -1) {
         // Define '--' property on `args`
-        args[arg] = args._.slice(offset + 4)
+        args[arg] = args._.slice(offset + 3)
 
         // Remove '--' and every arg after it
         args._ = args._.slice(0, offset)
