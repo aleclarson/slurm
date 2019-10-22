@@ -69,7 +69,7 @@ interface StaticArgs extends Array<string> {
   _: string
 
   /** The `--` flag that steals the remaining arguments */
-  ['--']?: string[]
+  ['--']?: string
 }
 
 declare module 'slurm' {
