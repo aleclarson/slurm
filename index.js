@@ -3,10 +3,12 @@ const longRE = /^\-\-[^\-].+$/i
 
 const empty = {}
 const forbiddenFlags = ['*', '_', 'length']
+const quoteSpaces = arg =>
+  arg.includes(' ') ? '"' + arg + '"' : arg
 
 function slurm(flags = empty) {
   let args = process.argv.slice(2)
-  args._ = args.join(' ')
+  args._ = args.map(quoteSpaces).join(' ')
 
   // Pass "*" to disable strict mode.
   if (flags == '*') {
