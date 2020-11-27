@@ -8,6 +8,8 @@
     "index.*"
   ],
   "devDependencies": {
-    "prettier": "^2.2.0"
+    "prettier": "^2.2.0",
+    "slurm": "link:./",
+    "testpass": "^0.9.8"
   }
 }
