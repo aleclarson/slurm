@@ -93,12 +93,13 @@ function slurm(flags = empty) {
               break
             }
 
+            // Non-boolean strings are flagless arguments.
+            // Move them to before the flag index.
+            args.splice(flagsBegin++, 0, arg)
+            i += 1
+
             // Ensure a value exists for this flag.
             setFlagDefault()
-
-            // Non-boolean strings are flagless arguments.
-            // Reuse `arg` with `flag` set to null.
-            i--
             flag = null
             continue
 
