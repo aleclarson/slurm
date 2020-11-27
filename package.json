@@ -6,5 +6,8 @@
   "description": "Typescript-ready CLI argument parser",
   "files": [
     "index.*"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "^2.2.0"
+  }
 }

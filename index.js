@@ -3,8 +3,7 @@ const longRE = /^\-\-[^\-].+$/i
 
 const empty = {}
 const forbiddenFlags = ['*', '_', 'length']
-const quoteSpaces = arg =>
-  arg.includes(' ') ? '"' + arg + '"' : arg
+const quoteSpaces = arg => (arg.includes(' ') ? '"' + arg + '"' : arg)
 
 function slurm(flags = empty) {
   let args = process.argv.slice(2)
@@ -15,7 +14,8 @@ function slurm(flags = empty) {
     flags = { '*': true }
   }
 
-  let flag = null, flagIdx = -1
+  let flag = null
+  let flagIdx = -1
   let flagsBegin = -1
   for (let i = 0; i < args.length; i++) {
     let arg = args[i]
@@ -25,7 +25,11 @@ function slurm(flags = empty) {
     if (shortRE.test(arg)) {
       // Treat -abc like -a -b -c
       if (arg.length > 2) {
-        let expanded = arg.slice(2).split('').map(ch => '-' + ch)
+        let expanded = arg
+          .slice(2)
+          .split('')
+          .map(ch => '-' + ch)
+
         args.splice(i, 0, ...expanded)
       }
       arg = arg.slice(1, 2)
@@ -120,7 +124,6 @@ function slurm(flags = empty) {
       }
     }
 
-
     if (isFlag) {
       // Support -x=1 or --foo=1,2
       let eq = arg.indexOf('=')
@@ -178,8 +181,7 @@ function slurm(flags = empty) {
       // Flag functions are passed `true` if no values exist
       // between it and the next flag (or the end).
       args[name] = cfg(true)
-    }
-    else if (cfg.type) {
+    } else if (cfg.type) {
       switch (cfg.type) {
         case 'boolean':
           args[name] = true
@@ -190,8 +192,7 @@ function slurm(flags = empty) {
       }
       // Other types must have a value.
       return slurm.error(args[flagIdx] + ' must be a ' + cfg.type)
-    }
-    else {
+    } else {
       // List flags default to an empty array.
       args[name] = cfg.list ? [] : true
     }
@@ -218,7 +219,7 @@ function slurm(flags = empty) {
   return args
 }
 
-slurm.error = function(msg) {
+slurm.error = function (msg) {
   console.log('error:', msg)
   process.exit(1)
 }
