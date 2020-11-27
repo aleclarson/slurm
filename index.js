@@ -94,9 +94,7 @@ function slurm(flags = empty) {
             }
 
             // Ensure a value exists for this flag.
-            if (val === undefined) {
-              setDefaultFlag(name)
-            }
+            setFlagDefault()
 
             // Non-boolean strings are flagless arguments.
             // Reuse `arg` with `flag` set to null.
@@ -146,8 +144,8 @@ function slurm(flags = empty) {
         flagsBegin = i
       }
       // Ensure a value exists for the previous flag.
-      else if (args[flag] === undefined) {
-        setDefaultFlag(flag)
+      else {
+        setFlagDefault()
       }
 
       flag = arg
@@ -156,9 +154,7 @@ function slurm(flags = empty) {
   }
 
   // Ensure a value exists for the last flag.
-  if (flag && args[flag] === undefined) {
-    setDefaultFlag(flag)
-  }
+  setFlagDefault()
 
   // Resolve flag aliases.
   function resolveFlag(name) {
@@ -173,9 +169,12 @@ function slurm(flags = empty) {
   }
 
   // Use a default value if necessary.
-  function setDefaultFlag() {
+  function setFlagDefault() {
     if (!flag) return
     let name = resolveFlag(flag)
+    if (args[name] !== undefined) {
+      return
+    }
     let cfg = getFlag(name)
     if (typeof cfg == 'function') {
       // Flag functions are passed `true` if no values exist
