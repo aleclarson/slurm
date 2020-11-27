@@ -1,0 +1,131 @@
+devDependencies:
+  prettier: 2.2.0
+  slurm: 'link:'
+  testpass: 0.9.8
+lockfileVersion: 5.2
+packages:
+  /@cush/relative/0.0.1:
+    dev: true
+    resolution:
+      integrity: sha512-Wm53WUnUy3CFveO5SecDyQZH4uuNG925DzyS0/tNyOE7T2a9liCU6vw+aIzCv7pyv6shkHZ0HGYxWicLi8dDow==
+  /ansi-256-colors/1.1.0:
+    dev: true
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-kQ3lDvzHwJ49gvL4er1rcAwYgYo=
+  /ansi-bold/0.1.1:
+    dependencies:
+      ansi-wrap: 0.1.0
+    dev: true
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-PmOVCvWswq4uZw5vZ96xFdGl9QU=
+  /ansi-wrap/0.1.0:
+    dev: true
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-qCJQ3bABXponyoLoLqYDu/pF768=
+  /bocks/0.0.1:
+    dev: true
+    resolution:
+      integrity: sha512-P7qGFGtCaxVREQQlgJy9CllRW+p2lw5HrCuBDrEKL7BdfOMIVRF2vdsT70NaXry9zYFyKbDCcjaz6ewapktIwA==
+  /buffer-from/1.1.1:
+    dev: true
+    resolution:
+      integrity: sha512-MQcXEUbCKtEo7bhqEs6560Hyd4XaovZlO/k9V3hjVUF/zwW7KBVdSK4gIt/bzwS9MbR5qob+F5jusZsb0YQK2A==
+  /clean-stack/1.3.0:
+    dev: true
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha1-noIVAa6XmYbEax1m0tQy2y/UrjE=
+  /dequals/0.0.1:
+    dev: true
+    resolution:
+      integrity: sha512-OTkWpUXwIcuCXK7Y2jErfj7iOMaAxItzt/JqketjyPbayFfdfTb/uc0aI6v7Ocl6gF02Mbh/fV3voWxeDY6Ksw==
+  /glob-regex/0.2.2:
+    dev: true
+    resolution:
+      integrity: sha512-3dzg5vt7G9beHqsqpJpMvdMZ+BRNPc9zC312pg3ew3PwtFq4jDeLu7QnJOCoQ3lbrkKAxpRkKDvSi1A9RxgzwA==
+  /glob-regex/0.3.2:
+    dev: true
+    resolution:
+      integrity: sha512-m5blUd3/OqDTWwzBBtWBPrGlAzatRywHameHeekAZyZrskYouOGdNB8T/q6JucucvJXtOuyHIn0/Yia7iDasDw==
+  /is-set/1.0.0:
+    dev: true
+    engines:
+      node: '>=0.12.0'
+    resolution:
+      integrity: sha1-2l+T458IO7tO/S6/lSiu2HrnACg=
+  /prettier/2.2.0:
+    dev: true
+    engines:
+      node: '>=10.13.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-yYerpkvseM4iKD/BXLYUkQV5aKt4tQPqaGW6EsZjzyu0r7sVZZNPJW4Y8MyKmicp6t42XUPcBVA+H6sB3gqndw==
+  /recrawl/0.0.2:
+    dependencies:
+      '@cush/relative': 0.0.1
+      glob-regex: 0.3.2
+    dev: true
+    resolution:
+      integrity: sha512-pkBjvVtPjE1qKegDqsnqokU3a43dGaj021TW1EzRanTW+cZSWb5wmaCjoBNvZzALD6mr9EK/qlhNTsnHeFPsfw==
+  /slurm/0.3.0:
+    dependencies:
+      huey: github.com/aleclarson/huey/b9806b6bfb38f5c0175d970d20881abe09978a42
+    dev: true
+    resolution:
+      integrity: sha512-r4xmBj1LUNZjsRlArqMo5aUUW9MWH2FViZYgsvQ+VU7cHwXFodIRryC8djKz8O9HRn5yxR1KweB/C7TOCTbUqw==
+  /source-map-support/0.5.19:
+    dependencies:
+      buffer-from: 1.1.1
+      source-map: 0.6.1
+    dev: true
+    resolution:
+      integrity: sha512-Wonm7zOCIJzBGQdB+thsPar0kYuCIzYvxZwlBa87yi/Mdjv7Tip2cyVbLj5o0cFPN4EVkuTwb3GDDyUx2DGnGw==
+  /source-map/0.6.1:
+    dev: true
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
+  /testpass/0.9.8:
+    dependencies:
+      ansi-bold: 0.1.1
+      bocks: 0.0.1
+      clean-stack: 1.3.0
+      dequals: 0.0.1
+      glob-regex: 0.2.2
+      huey: github.com/aleclarson/huey/6b7342a0e91a2a21674899ad5ed8362ff5d8dc69
+      is-set: 1.0.0
+      recrawl: 0.0.2
+      slurm: 0.3.0
+      source-map-support: 0.5.19
+    dev: true
+    hasBin: true
+    resolution:
+      integrity: sha512-eIs5hmyyua32cLYBCtDOZIXSs4RGatZb9Eegr++QITjPP0X95sqLCkDrMTOdlgiCD57CDhY2tgfN3hUe8yccUA==
+  github.com/aleclarson/huey/6b7342a0e91a2a21674899ad5ed8362ff5d8dc69:
+    dependencies:
+      ansi-256-colors: 1.1.0
+    dev: true
+    name: huey
+    resolution:
+      tarball: 'https://codeload.github.com/aleclarson/huey/tar.gz/6b7342a0e91a2a21674899ad5ed8362ff5d8dc69'
+    version: 1.1.1
+  github.com/aleclarson/huey/b9806b6bfb38f5c0175d970d20881abe09978a42:
+    dependencies:
+      ansi-256-colors: 1.1.0
+    dev: true
+    name: huey
+    resolution:
+      tarball: 'https://codeload.github.com/aleclarson/huey/tar.gz/b9806b6bfb38f5c0175d970d20881abe09978a42'
+    version: 0.1.0
+specifiers:
+  prettier: ^2.2.0
+  slurm: 'link:./'
+  testpass: ^0.9.8
