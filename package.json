@@ -1,6 +1,6 @@
 {
   "name": "slurm",
-  "version": "0.5.9",
+  "version": "0.5.10",
   "license": "MIT",
   "repository": "aleclarson/slurm",
   "description": "Typescript-ready CLI argument parser",
